@@ -1,0 +1,452 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Threat Intelligence Brief - Febrero 2025</title>
+    <style>/* styles.css */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: #34495e;
+        }
+        
+        .tlp-label {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-left: 10px;
+            color: white;
+        }
+        
+        .tlp-clear {
+            background-color: #4CAF50;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid #3498db;
+        }
+        
+        .summary-card .value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .critical {
+            color: #e74c3c;
+        }
+        
+        .high {
+            color: #f39c12;
+        }
+        
+        .medium {
+            color: #f1c40f;
+        }
+        
+        .sector-tag {
+            display: inline-block;
+            background-color: #f3e5f5;
+            color: #8e24aa;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .zero-day-status {
+            font-weight: bold;
+        }
+        
+        .status-active {
+            color: #e74c3c;
+        }
+        
+        .status-mitigated {
+            color: #2ecc71;
+        }
+        
+        .cve-score {
+            font-weight: bold;
+        }
+        
+        .score-critical {
+            color: #e74c3c;
+        }
+        
+        .score-high {
+            color: #f39c12;
+        }
+        
+        .score-medium {
+            color: #f1c40f;
+        }
+        
+        .alert-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .alert-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .source-item {
+            margin-bottom: 15px;
+        }
+        
+        .source-name {
+            font-weight: bold;
+        }
+        
+        .mitigation-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        @media print {
+            body {
+                background: none;
+                color: #000;
+            }
+        
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        
+            .summary-card {
+                box-shadow: none;
+                border-top: none;
+            }
+        
+            .alert-item, .mitigation-item {
+                border-bottom: none;
+            }
+        }</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CYBER THREAT INTELLIGENCE BRIEF</h1>
+            <p id="report-period">Febrero 2025 <span class="tlp-label tlp-clear">TLP:CLEAR</span></p>
+        </header>
+
+        <section class="card" id="executive-summary">
+            <h2>Resumen Ejecutivo</h2>
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Vulnerabilidades Totales</h3>
+                    <div class="value">3,711</div>
+                    <p>Identificadas en Febrero 2025</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Críticas</h3>
+                    <div class="value critical">1</div>
+                    <p>CVSS ≥ 9.0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Altas</h3>
+                    <div class="value high">49</div>
+                    <p>CVSS 7.0-8.9</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Medias</h3>
+                    <div class="value medium">729</div>
+                    <p>CVSS 4.0-6.9</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <h3>Sectores Afectados</h3>
+                <div>
+                    <span class="sector-tag">Salud</span>
+                    <span class="sector-tag">Industrial</span>
+                    <span class="sector-tag">Gubernamental</span>
+                    <span class="sector-tag">Financiero</span>
+                    <span class="sector-tag">Educación</span>
+                    <span class="sector-tag">Energía</span>
+                    <span class="sector-tag">Telecomunicaciones</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <h3>Grupos de Ransomware Activos</h3>
+                <p>DragonRaaS, Akira, LockBit, BlackCat</p>
+            </div>
+            <div class="form-group">
+                <h3>Campañas Detectadas</h3>
+                <p>Troyanos bancarios, Botnets, Phishing, Supply Chain</p>
+            </div>
+            <div class="form-group">
+                <h3>Vulnerabilidades Explotadas</h3>
+                <p>Microsoft, Fortinet, Palo Alto</p>
+            </div>
+        </section>
+
+        <section class="card" id="incidents">
+            <h2>Incidentes Detectados</h2>
+            <div class="incident-item">
+                <div class="incident-date">03/02/2025</div>
+                <h3>Technico</h3>
+                <div>
+                    <span class="incident-country">Brasil</span>
+                    <span class="incident-sector">Agro</span>
+                </div>
+                <p>Technico, empresa del sector agro en Brasil, fue incluida en el sitio de filtración de datos del grupo de ransomware Arcus Media, lo que sugiere un posible ataque de ransomware.</p>
+            </div>
+            <div class="incident-item">
+                <div class="incident-date">04/02/2025</div>
+                <h3>360 Energy</h3>
+                <div>
+                    <span class="incident-country">Argentina</span>
+                    <span class="incident-sector">Energía</span>
+                </div>
+                <p>360 Energy, una gran firma de energía en el sector del petróleo y el gas en Argentina, ha sido añadida al sitio de víctimas de Akira.</p>
+            </div>
+            <div class="incident-item">
+                <div class="incident-date">10/02/2025</div>
+                <h3>Sizte</h3>
+                <div>
+                    <span class="incident-country">Argentina</span>
+                    <span class="incident-sector">Consultoría</span>
+                </div>
+                <p>El sitio web de la consultora Sizte sufrió una modificación no autorizada por el grupo DragonRaaS.</p>
+            </div>
+        </section>
+
+        <section class="card" id="exploits">
+            <h2>Exploits Publicados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Exploit</th>
+                        <th>Tipo</th>
+                        <th>Plataforma</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>28/02/2025</td>
+                        <td>XSS en Label Studio</td>
+                        <td>Network</td>
+                        <td>Label Studio</td>
+                    </tr>
+                    <tr>
+                        <td>28/02/2025</td>
+                        <td>RCE en FortiManager 7.6.0</td>
+                        <td>Remote Code</td>
+                        <td>Fortinet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" id="zero-day">
+            <h2>Zero-Day</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Plataforma</th>
+                        <th>Fecha Detección</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ZD-2025-001</td>
+                        <td><a href="https://example.com/zero-day-001" target="_blank">Windows Kernel Privilege Escalation</a></td>
+                        <td>Microsoft Windows</td>
+                        <td>15/02/2025</td>
+                        <td><span class="zero-day-status status-active">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>ZD-2025-002</td>
+                        <td><a href="https://example.com/zero-day-002" target="_blank">Apache Struts RCE</a></td>
+                        <td>Apache Struts</td>
+                        <td>22/02/2025</td>
+                        <td><span class="zero-day-status status-mitigated">Mitigado</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" id="vulnerabilities">
+            <h2>Nuevas Vulnerabilidades</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>CVE</th>
+                        <th>Aplicativo afectado</th>
+                        <th>Fecha de publicación</th>
+                        <th>CVSS 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CVE-2025-0108</td>
+                        <td>Palo Alto PAN-OS</td>
+                        <td>Feb 2025</td>
+                        <td><span class="cve-score score-high">7.3</span></td>
+                    </tr>
+                    <tr>
+                        <td>CVE-2024-45569</td>
+                        <td>Qualcomm Snapdragon</td>
+                        <td>Feb 2025</td>
+                        <td><span class="cve-score score-critical">9.8</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" id="alerts">
+            <h2>Alertas de Amenazas Cibernéticas</h2>
+            <div class="alert-item">
+                <h3>Threat Landscape: Campaña del troyano bancario Coyote ataca mediante archivos LNK</h3>
+                <p class="alert-date">Enero 2025</p>
+                <p>El pasado mes de enero, los laboratorios de FortiGuard descubrieron varios archivos LNK que de forma similar inyectaban comandos de PowerShell como parte de una operación de varias etapas que culmina con el despliegue de una carga del troyano bancario Coyote.</p>
+            </div>
+            <div class="alert-item">
+                <h3>Threat Landscape: Ransomware Makop y Lynx activos en LATAM</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Makop y Lynx son ransomware activos en Latinoamérica, utilizados en ataques dirigidos a empresas y usuarios mediante técnicas como el acceso no autorizado por RDP y phishing. Ambos cifran archivos utilizando algoritmos avanzados como AES y RSA, exigiendo un rescate para su recuperación. Mientras que Makop es conocido por agregar extensiones personalizadas a los archivos cifrados, Lynx sigue un modelo de doble extorsión, robando datos antes del cifrado para presionar a las víctimas a pagar.</p>
+            </div>
+            <div class="alert-item">
+                <h3>Threat Landscape: Actores maliciosos explotan vulnerabilidad crítica en PAN-OS</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Investigadores de GreyNoise han detectado explotación activa de la vulnerabilidad crítica CVE-2025-0108 en PAN-OS, el sistema operativo de firewalls de Palo Alto Networks. Esta falla permite a atacantes no autenticados eludir la autenticación en la interfaz de gestión web, interactuar directamente con los firewalls y ejecutar scripts PHP maliciosos. Adicionalmente, se observa que los actores maliciosos están combinando esta vulnerabilidad con otras (CVE-2024-9474 y CVE-2025-0111) para maximizar el impacto de sus ataques.</p>
+            </div>
+            <div class="alert-item">
+                <h3>Threat Landscape: Botnet ataca a los usuarios M365 con ataques password-spray</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Investigadores de Security Scorecard dieron con una botnet compuesta por más de 130,000 dispositivos comprometidos que está realizando ataques de password spraying contra cuentas de Microsoft 365 (M365). Los atacantes que aparentan tener relación con actores de amenazas vinculados a China aplican non-interactive sign-ins y Basic Authentication para evadir MFA y Conditional Access Policies (CAP), impactando organizaciones globales en sectores financieros, gubernamentales y empresariales.</p>
+            </div>
+        </section>
+
+        <section class="card" id="sources">
+            <h2>Fuentes de Inteligencia</h2>
+            <div class="source-item">
+                <div class="source-name">FortiGuard Labs</div>
+                <p>Detección de campañas de ransomware</p>
+            </div>
+            <div class="source-item">
+                <div class="source-name">MITRE ATT&CK</div>
+                <p>Tácticas y técnicas de grupos de amenazas</p>
+            </div>
+        </section>
+
+        <section class="card" id="mitigations">
+            <h2>Mitigaciones</h2>
+            <div class="mitigation-item">
+                <h3>Actualizaciones y Parches</h3>
+                <p>Mantener todos los sistemas y software actualizados con los últimos parches de seguridad, especialmente para las vulnerabilidades críticas identificadas en PAN-OS y Qualcomm Snapdragon.</p>
+            </div>
+            <div class="mitigation-item">
+                <h3>Protección contra Ransomware</h3>
+                <p>Implementar soluciones de protección contra ransomware que incluyan detección basada en comportamiento, copias de seguridad seguras y desconectadas, y políticas de restricción de ejecución de archivos.</p>
+            </div>
+            <div class="mitigation-item">
+                <h3>Detección de Troyanos Bancarios</h3>
+                <p>Configurar políticas de seguridad para bloquear archivos LNK sospechosos y monitorear la ejecución de scripts PowerShell no autorizados, especialmente aquellos que descargan y ejecutan contenido desde Internet.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,65 +1,62 @@
 <template>
   <div class="card mb-4 animate__animated animate__fadeIn">
+    <img src="../assets/Acc_Branded Tools_Email Banners_20210923.png" alt="CTI Brief Banner">
     <div class="card-header">
       <h2>Resumen Ejecutivo</h2>
     </div>
     <div class="card-body">
       <div class="resumen-grid">
         <div class="resumen-texto">
-          <ul>
-            <li v-for="(punto, index) in puntosResumen" :key="index">
-              {{ punto }}
+          <ul class="lista-principal">
+            <li v-for="(punto, index) in puntosPersonalizados" :key="index">
+              <div class="punto-contenido">
+                {{ punto.texto }}
+                <ul v-if="punto.subpuntos && punto.subpuntos.length" class="subpuntos">
+                  <li v-for="(subpunto, subIndex) in punto.subpuntos" :key="subIndex">
+                    {{ subpunto }}
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
         <div class="resumen-dashboard">
           <div class="indicator-grid">
-            <!-- Indicador 1: Incidentes -->
             <div class="indicator-item" @click="scrollToSection('incidentes')">
               <i class="fas fa-exclamation-triangle fa-2x icono"></i>
-              <h4>4</h4>
-              <small>Incidentes</small>
-              <span class="text-danger">+400%</span>
+              <h4>{{ indicadores.incidentes.valor }}</h4>
+              <small>Incidentes</small> <br>
+              <span :class="indicadores.incidentes.clase">{{ indicadores.incidentes.porcentaje }}</span>
             </div>
-
-            <!-- Indicador 2: Zero Days -->
             <div class="indicator-item" @click="scrollToSection('zero-days')">
               <i class="fas fa-bug fa-2x icono"></i>
-              <h4>6</h4>
-              <small>Zero Days</small>
-              <span class="text-muted">0%</span>
+              <h4>{{ indicadores.zeroDays.valor }}</h4>
+              <small>Zero Days</small><br>
+              <span :class="indicadores.zeroDays.clase">{{ indicadores.zeroDays.porcentaje }}</span>
             </div>
-
-            <!-- Indicador 3: Exploits -->
             <div class="indicator-item" @click="scrollToSection('exploits')">
               <i class="fas fa-code fa-2x icono"></i>
-              <h4>22</h4>
-              <small>Exploits</small>
-              <span class="text-success">+25%</span>
+              <h4>{{ indicadores.exploits.valor }}</h4>
+              <small>Exploits</small><br>
+              <span :class="indicadores.exploits.clase">{{ indicadores.exploits.porcentaje }}</span>
             </div>
-
-            <!-- Indicador 4: Nuevos CVE -->
             <div class="indicator-item" @click="scrollToSection('vulnerabilidades')">
               <i class="fas fa-shield-alt fa-2x icono"></i>
-              <h4>9</h4>
-              <small>Nuevos CVE</small>
-              <span class="text-success">+10%</span>
+              <h4>{{ indicadores.nuevosCVE.valor }}</h4>
+              <small>Nuevos CVE</small><br>
+              <span :class="indicadores.nuevosCVE.clase">{{ indicadores.nuevosCVE.porcentaje }}</span>
             </div>
-
-            <!-- Indicador 5: Mitigaciones -->
             <div class="indicator-item" @click="scrollToSection('conclusiones')">
               <i class="fas fa-tools fa-2x icono"></i>
-              <h4>0</h4>
-              <small>Mitigaciones</small>
-              <span class="text-muted">0%</span>
+              <h4>{{ indicadores.mitigaciones.valor }}</h4>
+              <small>Mitigaciones</small><br>
+              <span :class="indicadores.mitigaciones.clase">{{ indicadores.mitigaciones.porcentaje }}</span>
             </div>
-
-            <!-- Indicador 6: Alertas -->
             <div class="indicator-item" @click="scrollToSection('alertas')">
               <i class="fas fa-bell fa-2x icono"></i>
-              <h4>4</h4>
-              <small>Alertas</small>
-              <span class="text-danger">+400%</span>
+              <h4>{{ indicadores.alertas.valor }}</h4>
+              <small>Alertas</small><br>
+              <span :class="indicadores.alertas.clase">{{ indicadores.alertas.porcentaje }}</span>
             </div>
           </div>
         </div>
@@ -74,32 +71,49 @@
 <script>
 export default {
   props: {
-    mes: String,
-    año: String,
-    totalVulnerabilidades: Number,
-    vulnerabilidadesCriticas: Number,
-    vulnerabilidadesAltas: Number,
-    vulnerabilidadesMedias: Number,
-    sectoresAfectados: String,
-    gruposRansomware: String,
-    campañasIngenieria: String,
-  },
-  computed: {
-    puntosResumen() {
-      return [
-        `En ${this.mes} de ${this.año}, se publicaron ${this.totalVulnerabilidades} nuevas vulnerabilidades. De estas, ${this.vulnerabilidadesCriticas} fue crítica, ${this.vulnerabilidadesAltas} se calificaron como altas y ${this.vulnerabilidadesMedias} como medias.`,
-        `En el mes de ${this.mes} se registraron importantes ataques dirigidos al sector de ${this.sectoresAfectados}.`,
-        `Se descubrieron nuevas vulnerabilidades explotadas en naturaleza que impactan a Microsoft, Fortinet y Palo Alto.`,
-        `Los grupos más destacados en la publicación de nuevas víctimas fueron ${this.gruposRansomware}.`,
-        `Además, se descubrieron nuevas campañas de ${this.campañasIngenieria}.`,
-      ];
+    puntosPersonalizados: {
+      type: Array,
+      required: true,
+      default: () => [
+        {
+          texto: 'Actividad destacada de APT29 relacionada con campaña de phishing',
+          subpuntos: [
+            'Targeting sector energético',
+            'Nuevo malware CloudWizard detectado',
+            'Técnicas de evasión mejoradas'
+          ]
+        },
+        {
+          texto: 'Aumento de vulnerabilidades en software de virtualización',
+          subpuntos: [
+            'CVE-2024-12345 crítico en Hypervisor X',
+            'Parche disponible desde 15/03/2024',
+            'Exploits activos reportados'
+          ]
+        }
+      ]
     },
+    indicadores: {
+      type: Object,
+      required: true,
+      default: () => ({
+        incidentes: { valor: 0, porcentaje: '0%', clase: "text-muted" },
+        zeroDays: { valor: 0, porcentaje: '0%', clase: "text-muted" },
+        exploits: { valor: 0, porcentaje: '0%', clase: "text-muted" },
+        nuevosCVE: { valor: 0, porcentaje: '0%', clase: "text-muted" },
+        mitigaciones: { valor: 0, porcentaje: '0%', clase: "text-muted" },
+        alertas: { valor: 0, porcentaje: '0%', clase: "text-muted" }
+      })
+    }
   },
   methods: {
     scrollToSection(sectionId) {
-      document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-    },
-  },
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
 };
 </script>
 
@@ -111,19 +125,57 @@ export default {
   margin-bottom: 2rem;
 }
 
-.resumen-texto ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
+.lista-principal {
+  list-style-type: none;
+  padding-left: 1rem;
 }
 
-.resumen-texto ul li {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+.lista-principal > li {
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 1.5rem;
   line-height: 1.6;
 }
 
-.resumen-texto ul li strong {
-  color: var(--primary-color);
+.lista-principal > li::before {
+  content: "•";
+  color: #007bff;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1.5rem;
+  position: absolute;
+  left: 0;
+}
+
+.subpuntos {
+  list-style-type: circle;
+  margin-top: 0.5rem;
+  padding-left: 2rem;
+}
+
+.subpuntos li {
+  font-size: 0.95em;
+  color: #6c757d;
+  margin-bottom: 0.3rem;
+  position: relative;
+}
+
+.subpuntos li::before {
+  content: "◦";
+  color: #6c757d;
+  margin-right: 0.5rem;
+}
+
+.punto-contenido {
+  background: rgba(0, 123, 255, 0.03);
+  padding: 0.8rem;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.punto-contenido:hover {
+  background: rgba(0, 123, 255, 0.05);
 }
 
 .indicator-grid {
@@ -133,45 +185,33 @@ export default {
 }
 
 .indicator-item {
-  background: rgba(0, 123, 255, 0.1);
+  background: rgba(0, 123, 255, 0.05);
+  border: 1px solid #dee2e6;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.25rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .indicator-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.indicator-item h4 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.indicator-item small {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.indicator-item .text-success {
-  color: #28a745;
-}
-
-.indicator-item .text-danger {
-  color: #dc3545;
-}
-
-.indicator-item .text-muted {
-  color: #6c757d;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .alert-secondary {
-  background-color: rgba(108, 117, 125, 0.1);
-  border-color: rgba(108, 117, 125, 0.2);
-  color: var(--text-color);
-  margin-top: 1.5rem;
+  background-color: rgba(108, 117, 125, 0.05);
+  border: 1px solid rgba(108, 117, 125, 0.15);
+  color: #4a4a4a;
+  font-size: 0.9em;
+}
+
+.text-success { color: #28a745; }
+.text-danger { color: #dc3545; }
+.text-muted { color: #6c757d; }
+
+.fa-2x {
+  font-size: 1.75em;
+  margin-bottom: 0.5rem;
 }
 </style>
