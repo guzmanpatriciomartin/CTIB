@@ -9,16 +9,27 @@
         <thead>
           <tr>
             <th>CVE</th>
-            <th>Aplicación</th>
-            <th>CVSS</th>
+            <th>Aplicativo afectado</th>
+            <th>Fecha de publicación</th>
+            <th>CVSS 3</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(cve, index) in cves" :key="index">
-            <td>{{ cve.id }}</td>
-            <td>{{ cve.aplicativo }}</td>
-            <td><span :class="getCvssClass(cve.cvss)">{{ cve.cvss }}</span></td>
-          </tr>
+          <template v-for="(cve, index) in cvesLocal" :key="index">
+            <tr @click="toggleDescription(index)">
+              <td>{{ cve.id }}</td>
+              <td>{{ cve.aplicativo }}</td>
+              <td>{{ cve.fecha }}</td>
+              <td><span :class="getCvssClass(cve.cvss)">{{ cve.cvss }}</span></td>
+            </tr>
+            <tr v-if="cve.showDescription">
+              <td colspan="4">
+                <div class="cve-description">
+                  <strong>Descripción:</strong> {{ cve.descripcion }}
+                </div>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
       <div class="alert alert-secondary mt-3">
@@ -33,11 +44,19 @@ export default {
   props: {
     cves: Array,
   },
+  data() {
+    return {
+      cvesLocal: this.cves.map(cve => ({ ...cve, showDescription: false })),
+    };
+  },
   methods: {
     getCvssClass(cvss) {
       if (cvss >= 9) return 'badge badge-danger';
       if (cvss >= 7) return 'badge badge-warning';
       return 'badge badge-success';
+    },
+    toggleDescription(index) {
+      this.cvesLocal[index].showDescription = !this.cvesLocal[index].showDescription;
     },
   },
 };
@@ -62,5 +81,16 @@ export default {
 .badge-success {
   background-color: #28a745;
   color: white;
+}
+
+.cve-description {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+tr {
+  cursor: pointer;
 }
 </style>

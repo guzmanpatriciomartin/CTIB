@@ -1,0 +1,1738 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Threat Intelligence Brief</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --tlp-clear: #4CAF50;
+            --tlp-green: #8BC34A;
+            --tlp-amber: #FFC107;
+            --tlp-red: #F44336;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2, h3, h4 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .summary-card h3 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .critical {
+            color: var(--danger-color);
+        }
+        
+        .high {
+            color: var(--warning-color);
+        }
+        
+        .medium {
+            color: #f1c40f;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 10px 0;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-danger {
+            background: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-warning {
+            background: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 25px;
+            border: none;
+            width: 85%;
+            max-width: 1000px;
+            border-radius: 8px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-section {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .error {
+            color: var(--danger-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: #f1f1f1;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #e1e1e1;
+        }
+        
+        .tab.active {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+        
+        .badge-critical {
+            background-color: var(--danger-color);
+        }
+        
+        .badge-high {
+            background-color: var(--warning-color);
+        }
+        
+        .badge-medium {
+            background-color: #f1c40f;
+        }
+        
+        .badge-low {
+            background-color: var(--success-color);
+        }
+        
+        .badge-info {
+            background-color: var(--info-color);
+        }
+        
+        .tlp-label {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        
+        .tlp-clear {
+            background-color: var(--tlp-clear);
+            color: white;
+        }
+        
+        .tlp-green {
+            background-color: var(--tlp-green);
+            color: #333;
+        }
+        
+        .tlp-amber {
+            background-color: var(--tlp-amber);
+            color: #333;
+        }
+        
+        .tlp-red {
+            background-color: var(--tlp-red);
+            color: white;
+        }
+        
+        .incident-item, .alert-item, .mitigation-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .incident-item:last-child, .alert-item:last-child, .mitigation-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .incident-date {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+        
+        .incident-sector {
+            display: inline-block;
+            background-color: #e1f5fe;
+            color: #0288d1;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        .incident-country {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #388e3c;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .alert-source {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .alert-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .mitigation-title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+        
+        .mitigation-affected {
+            font-style: italic;
+            color: #666;
+        }
+        
+        .sector-tag {
+            display: inline-block;
+            background-color: #f3e5f5;
+            color: #8e24aa;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .scroll-to-section {
+            cursor: pointer;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .scroll-to-section:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        .zero-day-status {
+            font-weight: bold;
+        }
+        
+        .status-active {
+            color: var(--danger-color);
+        }
+        
+        .status-mitigated {
+            color: var(--success-color);
+        }
+        
+        .cve-score {
+            font-weight: bold;
+        }
+        
+        .score-critical {
+            color: var(--danger-color);
+        }
+        
+        .score-high {
+            color: var(--warning-color);
+        }
+        
+        .score-medium {
+            color: #f1c40f;
+        }
+        
+        .score-low {
+            color: var(--success-color);
+        }
+        
+        .source-item {
+            margin-bottom: 15px;
+        }
+        
+        .source-name {
+            font-weight: bold;
+        }
+        
+        .source-url {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .source-url:hover {
+            text-decoration: underline;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover {
+            background: #f1f1f1;
+        }
+        
+        .page-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                flex-wrap: nowrap;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <header>
+            <h1>CYBER THREAT INTELLIGENCE BRIEF</h1>
+            <p id="report-period">Febrero 2025 <span class="tlp-label tlp-clear">TLP:CLEAR</span></p>
+            <button class="btn" id="edit-btn">Editar Reporte</button>
+        </header>
+        
+        <section class="card" id="executive-summary">
+            <h2>Resumen Ejecutivo</h2>
+            
+            <div class="summary-cards">
+                <div class="summary-card" data-section="vulnerabilities">
+                    <h3>Vulnerabilidades Totales</h3>
+                    <div class="value">3,711</div>
+                    <p>Identificadas en Febrero 2025</p>
+                </div>
+                
+                <div class="summary-card" data-section="vulnerabilities">
+                    <h3>Críticas</h3>
+                    <div class="value critical">1</div>
+                    <p>CVSS ≥ 9.0</p>
+                </div>
+                
+                <div class="summary-card" data-section="vulnerabilities">
+                    <h3>Altas</h3>
+                    <div class="value high">49</div>
+                    <p>CVSS 7.0-8.9</p>
+                </div>
+                
+                <div class="summary-card" data-section="vulnerabilities">
+                    <h3>Medias</h3>
+                    <div class="value medium">729</div>
+                    <p>CVSS 4.0-6.9</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>Sectores Afectados</h3>
+                <div>
+                    <span class="sector-tag">Salud</span>
+                    <span class="sector-tag">Industrial</span>
+                    <span class="sector-tag">Gubernamental</span>
+                    <span class="sector-tag">Financiero</span>
+                    <span class="sector-tag">Educación</span>
+                    <span class="sector-tag">Energía</span>
+                    <span class="sector-tag">Telecomunicaciones</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>Grupos de Ransomware Activos</h3>
+                <p>DragonRaaS, Akira, LockBit, BlackCat</p>
+            </div>
+            
+            <div class="form-group">
+                <h3>Campañas Detectadas</h3>
+                <p>Troyanos bancarios, Botnets, Phishing, Supply Chain</p>
+            </div>
+            
+            <div class="form-group">
+                <h3>Vulnerabilidades Explotadas</h3>
+                <p>Microsoft, Fortinet, Palo Alto</p>
+            </div>
+        </section>
+        
+        <section class="card" id="incidents">
+            <h2>Incidentes Detectados</h2>
+            <p>El conocimiento y la vigilancia de los ciber incidentes es fundamentales para la seguridad de cualquier organización. La respuesta ante estos incidentes y su posterior análisis post mortem son cruciales para el proceso de fortalecimiento de los sistemas. Al mantenerse informadas sobre los últimos ataques, las organizaciones pueden identificar y mitigar posibles amenazas.</p>
+            
+            <div class="incident-item">
+                <div class="incident-date">03/02/2025</div>
+                <h3>Technico</h3>
+                <div>
+                    <span class="incident-country">Brasil</span>
+                    <span class="incident-sector">Agro</span>
+                </div>
+                <p>Technico, empresa del sector agro en Brasil, fue incluida en el sitio de filtración de datos del grupo de ransomware Arcus Media, lo que sugiere un posible ataque de ransomware.</p>
+            </div>
+            
+            <div class="incident-item">
+                <div class="incident-date">04/02/2025</div>
+                <h3>360 Energy</h3>
+                <div>
+                    <span class="incident-country">Argentina</span>
+                    <span class="incident-sector">Energía</span>
+                </div>
+                <p>360 Energy, una gran firma de energía en el sector del petróleo y el gas en Argentina, ha sido añadida al sitio de víctimas de Akira.</p>
+            </div>
+            
+            <div class="incident-item">
+                <div class="incident-date">10/02/2025</div>
+                <h3>Sizte</h3>
+                <div>
+                    <span class="incident-country">Argentina</span>
+                    <span class="incident-sector">Consultoría</span>
+                </div>
+                <p>El sitio web de la consultora Sizte sufrió una modificación no autorizada por el grupo DragonRaaS.</p>
+            </div>
+        </section>
+        
+        <section class="card" id="exploits">
+            <h2>Exploits Publicados</h2>
+            <p>Los exploit son puertas traseras que los atacantes pueden utilizar permitiendo el robo de datos, la instalación de malware, la toma de control de sistemas y múltiples ataques a sistemas informáticos. Al comprender estos exploit, la amenaza que representan y cómo funcionan, las empresas pueden tomar medidas proactivas para protegerse de ataques cibernéticos.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Exploit</th>
+                        <th>Tipo</th>
+                        <th>Plataforma</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>28/02/2025</td>
+                        <td>XSS en Label Studio</td>
+                        <td>Network</td>
+                        <td>Label Studio</td>
+                    </tr>
+                    <tr>
+                        <td>28/02/2025</td>
+                        <td>RCE en FortiManager 7.6.0</td>
+                        <td>Remote Code</td>
+                        <td>Fortinet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="card" id="zero-day">
+            <h2>Zero-Day</h2>
+            <p>El conocimiento de los "zero days" o vulnerabilidades de día cero es fundamental en el ámbito de la ciberseguridad. Estas vulnerabilidades son fallos de seguridad en software o hardware que son desconocidos para los fabricantes y, por lo tanto, no tienen un parche o solución disponible en el momento de su descubrimiento.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Plataforma</th>
+                        <th>Fecha Detección</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ZD-2025-001</td>
+                        <td><a href="https://example.com/zero-day-001" target="_blank">Windows Kernel Privilege Escalation</a></td>
+                        <td>Microsoft Windows</td>
+                        <td>15/02/2025</td>
+                        <td><span class="zero-day-status status-active">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>ZD-2025-002</td>
+                        <td><a href="https://example.com/zero-day-002" target="_blank">Apache Struts RCE</a></td>
+                        <td>Apache Struts</td>
+                        <td>22/02/2025</td>
+                        <td><span class="zero-day-status status-mitigated">Mitigado</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="card" id="vulnerabilities">
+            <h2>Nuevas Vulnerabilidades</h2>
+            <p>Las Vulnerabilidades Comunes Enumeradas (CVE) proporcionan detalles sobre vulnerabilidades de seguridad en sistemas y software, permitiendo a las organizaciones identificar y mitigar posibles amenazas. Las CVE aquí listadas son sumamente relevantes para la seguridad de los sistemas, recomendamos realizar las mitigaciones necesarias para evitar la exposición a estas vulnerabilidades.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>CVE</th>
+                        <th>Aplicativo afectado</th>
+                        <th>Fecha de publicación</th>
+                        <th>CVSS 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CVE-2025-0108</td>
+                        <td>Palo Alto PAN-OS</td>
+                        <td>Feb 2025</td>
+                        <td><span class="cve-score score-high">7.3</span></td>
+                    </tr>
+                    <tr>
+                        <td>CVE-2024-45569</td>
+                        <td>Qualcomm Snapdragon</td>
+                        <td>Feb 2025</td>
+                        <td><span class="cve-score score-critical">9.8</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="card" id="alerts">
+            <h2>Alertas de Amenazas Cibernéticas</h2>
+            <p>Las alertas de Cyber Threat Intelligence son notificaciones que informan sobre amenazas cibernéticas identificadas, como vulnerabilidades o ataques activos. El Traffic Light Protocol (TLP) es un conjunto de directrices que regulan la divulgación de información sensible, utilizando colores para indicar los límites de compartición establecidos por el remitente. La importancia de estas alertas y del TLP radica en su capacidad para comunicar información crítica de manera segura y eficiente, asegurando que solo las partes adecuadas tengan acceso a la información necesaria para protegerse contra amenazas cibernéticas.</p>
+            
+            <div class="alert-item">
+                <h3>Threat Landscape: Campaña del troyano bancario Coyote ataca mediante archivos LNK</h3>
+                <p class="alert-date">Enero 2025</p>
+                <p>El pasado mes de enero, los laboratorios de FortiGuard descubrieron varios archivos LNK que de forma similar inyectaban comandos de PowerShell como parte de una operación de varias etapas que culmina con el despliegue de una carga del troyano bancario Coyote.</p>
+            </div>
+            
+            <div class="alert-item">
+                <h3>Threat Landscape: Ransomware Makop y Lynx activos en LATAM</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Makop y Lynx son ransomware activos en Latinoamérica, utilizados en ataques dirigidos a empresas y usuarios mediante técnicas como el acceso no autorizado por RDP y phishing. Ambos cifran archivos utilizando algoritmos avanzados como AES y RSA, exigiendo un rescate para su recuperación. Mientras que Makop es conocido por agregar extensiones personalizadas a los archivos cifrados, Lynx sigue un modelo de doble extorsión, robando datos antes del cifrado para presionar a las víctimas a pagar.</p>
+            </div>
+            
+            <div class="alert-item">
+                <h3>Threat Landscape: Actores maliciosos explotan vulnerabilidad crítica en PAN-OS</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Investigadores de GreyNoise han detectado explotación activa de la vulnerabilidad crítica CVE-2025-0108 en PAN-OS, el sistema operativo de firewalls de Palo Alto Networks. Esta falla permite a atacantes no autenticados eludir la autenticación en la interfaz de gestión web, interactuar directamente con los firewalls y ejecutar scripts PHP maliciosos. Adicionalmente, se observa que los actores maliciosos están combinando esta vulnerabilidad con otras (CVE-2024-9474 y CVE-2025-0111) para maximizar el impacto de sus ataques.</p>
+            </div>
+            
+            <div class="alert-item">
+                <h3>Threat Landscape: Botnet ataca a los usuarios M365 con ataques password-spray</h3>
+                <p class="alert-date">Febrero 2025</p>
+                <p>Investigadores de Security Scorecard dieron con una botnet compuesto por más de 130,000 dispositivos comprometidos que está realizando ataques de password spraying contra cuentas de Microsoft 365 (M365). Los atacantes que aparentan tener relación con actores de amenazas vinculados a China aplican non-interactive sign-ins y Basic Authentication para evadir MFA y Conditional Access Policies (CAP), impactando organizaciones globales en sectores financieros, gubernamentales y empresariales.</p>
+            </div>
+        </section>
+        
+        <section class="card" id="sources">
+            <h2>Fuentes de Inteligencia</h2>
+            <div class="source-item">
+                <div class="source-name">FortiGuard Labs</div>
+                <p>Detección de campañas de ransomware</p>
+            </div>
+            <div class="source-item">
+                <div class="source-name">MITRE ATT&CK</div>
+                <p>Tácticas y técnicas de grupos de amenazas</p>
+            </div>
+        </section>
+        
+        <section class="card" id="mitigations">
+            <h2>Mitigaciones</h2>
+            <p>Para contrarrestar las amenazas cibernéticas identificadas, se recomiendan las siguientes medidas de mitigación:</p>
+            
+            <div class="mitigation-item">
+                <h3>Actualizaciones y Parches</h3>
+                <p>Mantener todos los sistemas y software actualizados con los últimos parches de seguridad, especialmente para las vulnerabilidades críticas identificadas en PAN-OS y Qualcomm Snapdragon.</p>
+            </div>
+            
+            <div class="mitigation-item">
+                <h3>Protección contra Ransomware</h3>
+                <p>Implementar soluciones de protección contra ransomware que incluyan detección basada en comportamiento, copias de seguridad seguras y desconectadas, y políticas de restricción de ejecución de archivos.</p>
+            </div>
+            
+            <div class="mitigation-item">
+                <h3>Detección de Troyanos Bancarios</h3>
+                <p>Configurar políticas de seguridad para bloquear archivos LNK sospechosos y monitorear la ejecución de scripts PowerShell no autorizados, especialmente aquellos que descargan y ejecutan contenido desde Internet.</p>
+            </div>
+        </section>
+        
+        <div class="pagination">
+            <button class="page-btn" id="prev-page">Anterior</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn" id="next-page">Siguiente</button>
+        </div>
+    </div>
+    
+    <!-- Modal de Edición -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Threat Intelligence Brief</h2>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="general">General</div>
+                <div class="tab" data-tab="incidents">Incidentes</div>
+                <div class="tab" data-tab="exploits">Exploits</div>
+                <div class="tab" data-tab="zero-day">Zero-Day</div>
+                <div class="tab" data-tab="vulnerabilities">Vulnerabilidades</div>
+                <div class="tab" data-tab="alerts">Alertas</div>
+                <div class="tab" data-tab="sources">Fuentes</div>
+                <div class="tab" data-tab="mitigations">Mitigaciones</div>
+            </div>
+            
+            <form id="brief-form">
+                <!-- Pestaña General -->
+                <div class="tab-content active" id="general-tab">
+                    <div class="form-section">
+                        <h3>Información General</h3>
+                        <div class="form-group">
+                            <label for="month">Mes:</label>
+                            <input type="text" id="month" value="Febrero" required>
+                            <div class="error" id="month-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="year">Año:</label>
+                            <input type="text" id="year" value="2025" required>
+                            <div class="error" id="year-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tlp">Clasificación TLP:</label>
+                            <select id="tlp" required>
+                                <option value="CLEAR" selected>CLEAR</option>
+                                <option value="GREEN">GREEN</option>
+                                <option value="AMBER">AMBER</option>
+                                <option value="RED">RED</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Resumen de Vulnerabilidades</h3>
+                        <div class="form-group">
+                            <label for="total-vulnerabilities">Total Vulnerabilidades:</label>
+                            <input type="number" id="total-vulnerabilities" value="3711" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="critical-vulnerabilities">Vulnerabilidades Críticas:</label>
+                            <input type="number" id="critical-vulnerabilities" value="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="high-vulnerabilities">Vulnerabilidades Altas:</label>
+                            <input type="number" id="high-vulnerabilities" value="49" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medium-vulnerabilities">Vulnerabilidades Medias:</label>
+                            <input type="number" id="medium-vulnerabilities" value="729" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Información Adicional</h3>
+                        <div class="form-group">
+                            <label for="affected-sectors">Sectores Afectados (separados por comas):</label>
+                            <input type="text" id="affected-sectors" value="Salud, Industrial, Gubernamental, Financiero, Educación, Energía, Telecomunicaciones" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ransomware-groups">Grupos de Ransomware Activos (separados por comas):</label>
+                            <input type="text" id="ransomware-groups" value="DragonRaaS, Akira, LockBit, BlackCat" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="campaigns">Campañas Detectadas (separados por comas):</label>
+                            <input type="text" id="campaigns" value="Troyanos bancarios, Botnets, Phishing, Supply Chain" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exploited-vulnerabilities">Vulnerabilidades Explotadas (separados por comas):</label>
+                            <input type="text" id="exploited-vulnerabilities" value="Microsoft, Fortinet, Palo Alto" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Incidentes -->
+                <div class="tab-content" id="incidents-tab">
+                    <div class="form-section">
+                        <h3>Incidentes Detectados</h3>
+                        <div id="incidents-container">
+                            <div class="incident-item">
+                                <div class="form-group">
+                                    <label for="incident1-date">Fecha:</label>
+                                    <input type="text" id="incident1-date" value="03/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident1-title">Título:</label>
+                                    <input type="text" id="incident1-title" value="Technico" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident1-country">País:</label>
+                                    <input type="text" id="incident1-country" value="Brasil" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident1-sector">Sector:</label>
+                                    <input type="text" id="incident1-sector" value="Agro" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident1-description">Descripción:</label>
+                                    <textarea id="incident1-description" required>Technico, empresa del sector agro en Brasil, fue incluida en el sitio de filtración de datos del grupo de ransomware Arcus Media, lo que sugiere un posible ataque de ransomware.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="incident-item">
+                                <div class="form-group">
+                                    <label for="incident2-date">Fecha:</label>
+                                    <input type="text" id="incident2-date" value="04/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident2-title">Título:</label>
+                                    <input type="text" id="incident2-title" value="360 Energy" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident2-country">País:</label>
+                                    <input type="text" id="incident2-country" value="Argentina" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident2-sector">Sector:</label>
+                                    <input type="text" id="incident2-sector" value="Energía" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident2-description">Descripción:</label>
+                                    <textarea id="incident2-description" required>360 Energy, una gran firma de energía en el sector del petróleo y el gas en Argentina, ha sido añadida al sitio de víctimas de Akira.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="incident-item">
+                                <div class="form-group">
+                                    <label for="incident3-date">Fecha:</label>
+                                    <input type="text" id="incident3-date" value="10/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident3-title">Título:</label>
+                                    <input type="text" id="incident3-title" value="Sizte" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident3-country">País:</label>
+                                    <input type="text" id="incident3-country" value="Argentina" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident3-sector">Sector:</label>
+                                    <input type="text" id="incident3-sector" value="Consultoría" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incident3-description">Descripción:</label>
+                                    <textarea id="incident3-description" required>El sitio web de la consultora Sizte sufrió una modificación no autorizada por el grupo DragonRaaS.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-incident">Agregar Incidente</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Exploits -->
+                <div class="tab-content" id="exploits-tab">
+                    <div class="form-section">
+                        <h3>Exploits Publicados</h3>
+                        <div id="exploits-container">
+                            <div class="exploit-item">
+                                <div class="form-group">
+                                    <label for="exploit1-date">Fecha:</label>
+                                    <input type="text" id="exploit1-date" value="28/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit1-name">Nombre:</label>
+                                    <input type="text" id="exploit1-name" value="XSS en Label Studio" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit1-type">Tipo:</label>
+                                    <input type="text" id="exploit1-type" value="Network" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit1-platform">Plataforma:</label>
+                                    <input type="text" id="exploit1-platform" value="Label Studio" required>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="exploit-item">
+                                <div class="form-group">
+                                    <label for="exploit2-date">Fecha:</label>
+                                    <input type="text" id="exploit2-date" value="28/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit2-name">Nombre:</label>
+                                    <input type="text" id="exploit2-name" value="RCE en FortiManager 7.6.0" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit2-type">Tipo:</label>
+                                    <input type="text" id="exploit2-type" value="Remote Code" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exploit2-platform">Plataforma:</label>
+                                    <input type="text" id="exploit2-platform" value="Fortinet" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-exploit">Agregar Exploit</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Zero-Day -->
+                <div class="tab-content" id="zero-day-tab">
+                    <div class="form-section">
+                        <h3>Vulnerabilidades Zero-Day</h3>
+                        <div id="zero-day-container">
+                            <div class="zero-day-item">
+                                <div class="form-group">
+                                    <label for="zero-day1-id">ID:</label>
+                                    <input type="text" id="zero-day1-id" value="ZD-2025-001" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day1-name">Nombre:</label>
+                                    <input type="text" id="zero-day1-name" value="Windows Kernel Privilege Escalation" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day1-url">URL:</label>
+                                    <input type="url" id="zero-day1-url" value="https://example.com/zero-day-001" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day1-platform">Plataforma:</label>
+                                    <input type="text" id="zero-day1-platform" value="Microsoft Windows" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day1-date">Fecha Detección:</label>
+                                    <input type="text" id="zero-day1-date" value="15/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day1-status">Estado:</label>
+                                    <select id="zero-day1-status" required>
+                                        <option value="active" selected>Activo</option>
+                                        <option value="mitigated">Mitigado</option>
+                                    </select>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="zero-day-item">
+                                <div class="form-group">
+                                    <label for="zero-day2-id">ID:</label>
+                                    <input type="text" id="zero-day2-id" value="ZD-2025-002" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day2-name">Nombre:</label>
+                                    <input type="text" id="zero-day2-name" value="Apache Struts RCE" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day2-url">URL:</label>
+                                    <input type="url" id="zero-day2-url" value="https://example.com/zero-day-002" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day2-platform">Plataforma:</label>
+                                    <input type="text" id="zero-day2-platform" value="Apache Struts" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day2-date">Fecha Detección:</label>
+                                    <input type="text" id="zero-day2-date" value="22/02/2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="zero-day2-status">Estado:</label>
+                                    <select id="zero-day2-status" required>
+                                        <option value="active">Activo</option>
+                                        <option value="mitigated" selected>Mitigado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-zero-day">Agregar Zero-Day</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Vulnerabilidades -->
+                <div class="tab-content" id="vulnerabilities-tab">
+                    <div class="form-section">
+                        <h3>Vulnerabilidades (CVE)</h3>
+                        <div id="vulnerabilities-container">
+                            <div class="vulnerability-item">
+                                <div class="form-group">
+                                    <label for="cve1-id">CVE ID:</label>
+                                    <input type="text" id="cve1-id" value="CVE-2025-0108" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve1-app">Aplicativo afectado:</label>
+                                    <input type="text" id="cve1-app" value="Palo Alto PAN-OS" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve1-date">Fecha de publicación:</label>
+                                    <input type="text" id="cve1-date" value="Feb 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve1-cvss">CVSS 3:</label>
+                                    <input type="number" step="0.1" id="cve1-cvss" value="7.3" min="0" max="10" required>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="vulnerability-item">
+                                <div class="form-group">
+                                    <label for="cve2-id">CVE ID:</label>
+                                    <input type="text" id="cve2-id" value="CVE-2024-45569" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve2-app">Aplicativo afectado:</label>
+                                    <input type="text" id="cve2-app" value="Qualcomm Snapdragon" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve2-date">Fecha de publicación:</label>
+                                    <input type="text" id="cve2-date" value="Feb 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cve2-cvss">CVSS 3:</label>
+                                    <input type="number" step="0.1" id="cve2-cvss" value="9.8" min="0" max="10" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-cve">Agregar CVE</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Alertas -->
+                <div class="tab-content" id="alerts-tab">
+                    <div class="form-section">
+                        <h3>Alertas de Amenazas Cibernéticas</h3>
+                        <div id="alerts-container">
+                            <div class="alert-item">
+                                <div class="form-group">
+                                    <label for="alert1-title">Título:</label>
+                                    <input type="text" id="alert1-title" value="Threat Landscape: Campaña del troyano bancario Coyote ataca mediante archivos LNK" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert1-date">Fecha:</label>
+                                    <input type="text" id="alert1-date" value="Enero 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert1-description">Descripción:</label>
+                                    <textarea id="alert1-description" required>El pasado mes de enero, los laboratorios de FortiGuard descubrieron varios archivos LNK que de forma similar inyectaban comandos de PowerShell como parte de una operación de varias etapas que culmina con el despliegue de una carga del troyano bancario Coyote.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="alert-item">
+                                <div class="form-group">
+                                    <label for="alert2-title">Título:</label>
+                                    <input type="text" id="alert2-title" value="Threat Landscape: Ransomware Makop y Lynx activos en LATAM" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert2-date">Fecha:</label>
+                                    <input type="text" id="alert2-date" value="Febrero 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert2-description">Descripción:</label>
+                                    <textarea id="alert2-description" required>Makop y Lynx son ransomware activos en Latinoamérica, utilizados en ataques dirigidos a empresas y usuarios mediante técnicas como el acceso no autorizado por RDP y phishing. Ambos cifran archivos utilizando algoritmos avanzados como AES y RSA, exigiendo un rescate para su recuperación. Mientras que Makop es conocido por agregar extensiones personalizadas a los archivos cifrados, Lynx sigue un modelo de doble extorsión, robando datos antes del cifrado para presionar a las víctimas a pagar.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="alert-item">
+                                <div class="form-group">
+                                    <label for="alert3-title">Título:</label>
+                                    <input type="text" id="alert3-title" value="Threat Landscape: Actores maliciosos explotan vulnerabilidad crítica en PAN-OS" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert3-date">Fecha:</label>
+                                    <input type="text" id="alert3-date" value="Febrero 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert3-description">Descripción:</label>
+                                    <textarea id="alert3-description" required>Investigadores de GreyNoise han detectado explotación activa de la vulnerabilidad crítica CVE-2025-0108 en PAN-OS, el sistema operativo de firewalls de Palo Alto Networks. Esta falla permite a atacantes no autenticados eludir la autenticación en la interfaz de gestión web, interactuar directamente con los firewalls y ejecutar scripts PHP maliciosos. Adicionalmente, se observa que los actores maliciosos están combinando esta vulnerabilidad con otras (CVE-2024-9474 y CVE-2025-0111) para maximizar el impacto de sus ataques.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="alert-item">
+                                <div class="form-group">
+                                    <label for="alert4-title">Título:</label>
+                                    <input type="text" id="alert4-title" value="Threat Landscape: Botnet ataca a los usuarios M365 con ataques password-spray" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert4-date">Fecha:</label>
+                                    <input type="text" id="alert4-date" value="Febrero 2025" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alert4-description">Descripción:</label>
+                                    <textarea id="alert4-description" required>Investigadores de Security Scorecard dieron con una botnet compuesto por más de 130,000 dispositivos comprometidos que está realizando ataques de password spraying contra cuentas de Microsoft 365 (M365). Los atacantes que aparentan tener relación con actores de amenazas vinculados a China aplican non-interactive sign-ins y Basic Authentication para evadir MFA y Conditional Access Policies (CAP), impactando organizaciones globales en sectores financieros, gubernamentales y empresariales.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-alert">Agregar Alerta</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Fuentes -->
+                <div class="tab-content" id="sources-tab">
+                    <div class="form-section">
+                        <h3>Fuentes de Inteligencia</h3>
+                        <div id="sources-container">
+                            <div class="source-item">
+                                <div class="form-group">
+                                    <label for="source1-name">Nombre:</label>
+                                    <input type="text" id="source1-name" value="FortiGuard Labs" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="source1-description">Descripción:</label>
+                                    <input type="text" id="source1-description" value="Detección de campañas de ransomware" required>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="source-item">
+                                <div class="form-group">
+                                    <label for="source2-name">Nombre:</label>
+                                    <input type="text" id="source2-name" value="MITRE ATT&CK" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="source2-description">Descripción:</label>
+                                    <input type="text" id="source2-description" value="Tácticas y técnicas de grupos de amenazas" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-source">Agregar Fuente</button>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Mitigaciones -->
+                <div class="tab-content" id="mitigations-tab">
+                    <div class="form-section">
+                        <h3>Recomendaciones de Mitigación</h3>
+                        <div id="mitigations-container">
+                            <div class="mitigation-item">
+                                <div class="form-group">
+                                    <label for="mitigation1-title">Título:</label>
+                                    <input type="text" id="mitigation1-title" value="Actualizaciones y Parches" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="mitigation1-description">Descripción:</label>
+                                    <textarea id="mitigation1-description" required>Mantener todos los sistemas y software actualizados con los últimos parches de seguridad, especialmente para las vulnerabilidades críticas identificadas en PAN-OS y Qualcomm Snapdragon.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="mitigation-item">
+                                <div class="form-group">
+                                    <label for="mitigation2-title">Título:</label>
+                                    <input type="text" id="mitigation2-title" value="Protección contra Ransomware" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="mitigation2-description">Descripción:</label>
+                                    <textarea id="mitigation2-description" required>Implementar soluciones de protección contra ransomware que incluyan detección basada en comportamiento, copias de seguridad seguras y desconectadas, y políticas de restricción de ejecución de archivos.</textarea>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div class="mitigation-item">
+                                <div class="form-group">
+                                    <label for="mitigation3-title">Título:</label>
+                                    <input type="text" id="mitigation3-title" value="Detección de Troyanos Bancarios" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="mitigation3-description">Descripción:</label>
+                                    <textarea id="mitigation3-description" required>Configurar políticas de seguridad para bloquear archivos LNK sospechosos y monitorear la ejecución de scripts PowerShell no autorizados, especialmente aquellos que descargan y ejecutan contenido desde Internet.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-mitigation">Agregar Mitigación</button>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 30px;">
+                    <button type="button" class="btn btn-success" id="save-btn">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" id="cancel-btn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const modal = document.getElementById('edit-modal');
+            const editBtn = document.getElementById('edit-btn');
+            const closeBtn = document.querySelector('.close');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const tabs = document.querySelectorAll('.tab');
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const pageBtns = document.querySelectorAll('.page-btn:not(#prev-page):not(#next-page)');
+            
+            // Botones para agregar elementos
+            const addIncidentBtn = document.getElementById('add-incident');
+            const addExploitBtn = document.getElementById('add-exploit');
+            const addZeroDayBtn = document.getElementById('add-zero-day');
+            const addCveBtn = document.getElementById('add-cve');
+            const addAlertBtn = document.getElementById('add-alert');
+            const addSourceBtn = document.getElementById('add-source');
+            const addMitigationBtn = document.getElementById('add-mitigation');
+            
+            // Contenedores de elementos editables
+            const incidentsContainer = document.getElementById('incidents-container');
+            const exploitsContainer = document.getElementById('exploits-container');
+            const zeroDayContainer = document.getElementById('zero-day-container');
+            const vulnerabilitiesContainer = document.getElementById('vulnerabilities-container');
+            const alertsContainer = document.getElementById('alerts-container');
+            const sourcesContainer = document.getElementById('sources-container');
+            const mitigationsContainer = document.getElementById('mitigations-container');
+            
+            // Abrir modal de edición
+            editBtn.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+            
+            // Cerrar modal
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+            
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            
+            // Cerrar al hacer clic fuera del modal
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Manejo de pestañas
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remover clase active de todos los tabs y contenidos
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Agregar clase active al tab seleccionado
+                    this.classList.add('active');
+                    
+                    // Mostrar el contenido correspondiente
+                    const tabId = this.dataset.tab;
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Paginación
+            let currentPage = 1;
+            
+            function updatePagination() {
+                pageBtns.forEach((btn, index) => {
+                    if (index + 1 === currentPage) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === pageBtns.length;
+                
+                // Aquí iría la lógica para cargar/actualizar el contenido de la página
+                // Por simplicidad, en este ejemplo solo actualizamos la paginación
+            }
+            
+            pageBtns.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    currentPage = index + 1;
+                    updatePagination();
+                });
+            });
+            
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < pageBtns.length) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+            
+            // Funciones para agregar elementos
+            addIncidentBtn.addEventListener('click', function() {
+                const newIncident = document.createElement('div');
+                newIncident.className = 'incident-item';
+                newIncident.innerHTML = `
+                    <div class="form-group">
+                        <label>Fecha:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Título:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>País:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sector:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <textarea required></textarea>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                incidentsContainer.appendChild(newIncident);
+                setupRemoveButtons();
+            });
+            
+            addExploitBtn.addEventListener('click', function() {
+                const newExploit = document.createElement('div');
+                newExploit.className = 'exploit-item';
+                newExploit.innerHTML = `
+                    <div class="form-group">
+                        <label>Fecha:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Plataforma:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                exploitsContainer.appendChild(newExploit);
+                setupRemoveButtons();
+            });
+            
+            addZeroDayBtn.addEventListener('click', function() {
+                const newZeroDay = document.createElement('div');
+                newZeroDay.className = 'zero-day-item';
+                newZeroDay.innerHTML = `
+                    <div class="form-group">
+                        <label>ID:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>URL:</label>
+                        <input type="url" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Plataforma:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Fecha Detección:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Estado:</label>
+                        <select required>
+                            <option value="active">Activo</option>
+                            <option value="mitigated">Mitigado</option>
+                        </select>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                zeroDayContainer.appendChild(newZeroDay);
+                setupRemoveButtons();
+            });
+            
+            addCveBtn.addEventListener('click', function() {
+                const newCve = document.createElement('div');
+                newCve.className = 'vulnerability-item';
+                newCve.innerHTML = `
+                    <div class="form-group">
+                        <label>CVE ID:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Aplicativo afectado:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Fecha de publicación:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>CVSS 3:</label>
+                        <input type="number" step="0.1" min="0" max="10" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                vulnerabilitiesContainer.appendChild(newCve);
+                setupRemoveButtons();
+            });
+            
+            addAlertBtn.addEventListener('click', function() {
+                const newAlert = document.createElement('div');
+                newAlert.className = 'alert-item';
+                newAlert.innerHTML = `
+                    <div class="form-group">
+                        <label>Título:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Fecha:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <textarea required></textarea>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                alertsContainer.appendChild(newAlert);
+                setupRemoveButtons();
+            });
+            
+            addSourceBtn.addEventListener('click', function() {
+                const newSource = document.createElement('div');
+                newSource.className = 'source-item';
+                newSource.innerHTML = `
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                sourcesContainer.appendChild(newSource);
+                setupRemoveButtons();
+            });
+            
+            addMitigationBtn.addEventListener('click', function() {
+                const newMitigation = document.createElement('div');
+                newMitigation.className = 'mitigation-item';
+                newMitigation.innerHTML = `
+                    <div class="form-group">
+                        <label>Título:</label>
+                        <input type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <textarea required></textarea>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-item">Eliminar</button>
+                    <hr>
+                `;
+                
+                mitigationsContainer.appendChild(newMitigation);
+                setupRemoveButtons();
+            });
+            
+            // Configurar botones de eliminar
+            function setupRemoveButtons() {
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.parentElement.remove();
+                    });
+                });
+            }
+            
+            // Inicializar botones de eliminar
+            setupRemoveButtons();
+            
+            // Guardar cambios (simulado)
+            saveBtn.addEventListener('click', function() {
+                alert('Los cambios han sido guardados (simulación)');
+                closeModal();
+            });
+            
+            // Inicializar paginación
+            updatePagination();
+        });
+    </script>
+</body>
+</html>
